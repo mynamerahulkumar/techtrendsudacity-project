@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name:  techtrends
-  namespace: prodtechtrends
+  namespace: sandbox
 spec:
   selector:
     app:  techtrends

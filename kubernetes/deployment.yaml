@@ -4,7 +4,7 @@ metadata:
   name:  techtrends
   labels:
     app:  techtrends
-  namespace: prodtechtrends
+  namespace: sandbox
 spec:
   replicas: 1
   selector:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - image:  mynamerahulkumar/techtrends:latest
-        name:   techtrendpro
+        name:   techtrends
         resources:
           requests:
             cpu: "250m"
