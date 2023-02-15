@@ -1,2 +1,2 @@
-# techtrendsudacity-project
+# techtrendsudacity-project Details
 Techtrends Project
