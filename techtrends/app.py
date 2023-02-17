@@ -4,6 +4,7 @@ from flask import Flask, jsonify, json, render_template, request, url_for, redir
 from werkzeug.exceptions import abort
 import logging
 from datetime import datetime
+import sys
 import json
 # Function to get a database connection.
 # This function connects to database with the name `database.db`
@@ -24,16 +25,28 @@ def get_post(post_id):
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
 connection_count=0
+
+
+# Define StreamHandlers for stdout and stderr
+stdout_handler = logging.StreamHandler(sys.stdout)
+stdout_handler.setLevel(logging.DEBUG)
+stderr_handler = logging.StreamHandler(sys.stderr)
+stderr_handler.setLevel(logging.ERROR)
+dual_handlers = [stdout_handler, stderr_handler]
+ 
+# Define basic configuration for the log messages
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(levelname)s:%(name)s:[%(asctime)s] - %(message)s',
+)
 # Define the main route of the web application 
 @app.route('/')
 def index():
     connection = get_db_connection()
     posts = connection.execute('SELECT * FROM posts').fetchall()
     connection.close()
-    current_ts=get_current_timestamp()
-    status=str(200)
-    logs="werkzeug:127.0.0.1 - -"+"["+current_ts+"]"+"Get all content/ HTTP/1.1 "+status+" -" 
-    app.logger.info(logs)
+    logs1="Get all content"
+    app.logger.info(logs1)
     return render_template('index.html', posts=posts)
 
 # Define how each individual article is rendered 
@@ -43,12 +56,12 @@ def post(post_id):
     post = get_post(post_id)
     if post is None:
       current_ts=get_current_timestamp()  
-      logs="werkzeug:127.0.0.1 - -"+"["+current_ts+"]"+"GET post_id-"+post_id+" / HTTP/1.1 "+400+" -" 
+      logs=" Error Post id not found " 
       app.logger.info(logs)
       return render_template('404.html'), 404
     else:
       current_ts=get_current_timestamp()  
-      logs="werkzeug:127.0.0.1 - -"+"["+current_ts+"]"+"GET post_title-"+post.title+" / HTTP/1.1 "+200+" -" 
+      logs="post id found " 
       app.logger.info(logs)  
       return render_template('post.html', post=post)
 
@@ -56,7 +69,7 @@ def post(post_id):
 @app.route('/about')
 def about():
     current_ts=get_current_timestamp()  
-    logs="werkzeug:127.0.0.1 - -"+"["+current_ts+"]"+"GET about / HTTP/1.1 "+200+" -" 
+    logs=" about page " 
     app.logger.info(logs)
     return render_template('about.html')
 
@@ -69,7 +82,7 @@ def create():
 
         if not title:
             current_ts=get_current_timestamp()  
-            logs="werkzeug:127.0.0.1 - -"+"["+current_ts+"]"+"POST title not found / HTTP/1.1 "+401+" -" 
+            logs="POST title not found" 
             app.logger.info(logs)
             flash('Title is required!')
         else:
@@ -78,8 +91,7 @@ def create():
                          (title, content))
             connection.commit()
             connection.close()
-            current_ts=get_current_timestamp()  
-            logs="werkzeug:127.0.0.1 - -"+"["+current_ts+"]"+"POST title created-"+title+" / HTTP/1.1 "+200+" -" 
+            logs="POST title created" 
             app.logger.info(logs)
             return redirect(url_for('index'))
 
@@ -93,8 +105,7 @@ def health_check():
         status=200,
         mimetype='application/json'
     )
-    current_ts=get_current_timestamp()
-    logs="werkzeug:127.0.0.1 - -"+"["+current_ts+"]"+"GET / HTTP/1.1 "+response.status+" -" 
+    logs=" health response success" 
     app.logger.info(logs)
     return response
 #This function check healths
@@ -112,8 +123,7 @@ def get_metrics():
             status=200,
             mimetype='application/json'
     )
-    current_ts=get_current_timestamp()
-    logs="werkzeug:127.0.0.1 - -"+"["+current_ts+"]"+"GET /metrics HTTP/1.1 "+response.status+" -" 
+    logs=" metrics response success " 
     app.logger.info(logs)
     connection.close()
     connection_count-=1

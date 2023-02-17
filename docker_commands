@@ -7,16 +7,34 @@ docker run -d -p 7111:3111 techtrends
 # docker tag techtrends mynamerahulkumar/techtrends:v1.0.0
 ## Docker commands used to get the application logs
 # TODO: insert the docker logs command
-docker logs -f
+docker logs --tail 1000 -f 
 ## Logs from the container running the TechTrends application
 # TODO: paste logs from the Docker container 
-docker logs --tail 1000 -f 11f2172098371343071fc829adcb95a914787c297939ca8502a53b2fc1dba148
+docker logs --tail 1000 -f bdfc84641c1d08ce883161357a111bc8f1d713a0df8cd6e179e6d821b116f9c2
 
 
 # logs
+-
+INFO:werkzeug:[2023-02-17 20:31:49,477] - 172.17.0.1 - - [17/Feb/2023 20:31:49] "GET /static/css/main.css HTTP/1.1" 304 -
+INFO:app:[2023-02-17 20:31:51,606] -  about page
+INFO:werkzeug:[2023-02-17 20:31:51,607] - 172.17.0.1 - - [17/Feb/2023 20:31:51] "GET /about HTTP/1.1" 200 -
+INFO:werkzeug:[2023-02-17 20:31:51,680] - 172.17.0.1 - - [17/Feb/2023 20:31:51] "GET /static/css/main.css HTTP/1.1" 304 -
+INFO:app:[2023-02-17 20:31:57,540] - Get all content
+INFO:werkzeug:[2023-02-17 20:31:57,547] - 172.17.0.1 - - [17/Feb/2023 20:31:57] "GET / HTTP/1.1" 200 -   
+INFO:werkzeug:[2023-02-17 20:31:57,669] - 172.17.0.1 - - [17/Feb/2023 20:31:57] "GET /static/css/main.css HTTP/1.1" 304 -
+INFO:app:[2023-02-17 20:32:01,424] - post id found
+INFO:werkzeug:[2023-02-17 20:32:01,431] - 172.17.0.1 - - [17/Feb/2023 20:32:01] "GET /1 HTTP/1.1" 200 -  
+INFO:werkzeug:[2023-02-17 20:32:01,564] - 172.17.0.1 - - [17/Feb/2023 20:32:01] "GET /static/css/main.css HTTP/1.1" 304 -
+INFO:app:[2023-02-17 20:32:07,459] -  Error Post id not found
+INFO:werkzeug:[2023-02-17 20:32:07,467] - 172.17.0.1 - - [17/Feb/2023 20:32:07] "GET /14 HTTP/1.1" 404 - 
+INFO:werkzeug:[2023-02-17 20:32:07,561] - 172.17.0.1 - - [17/Feb/2023 20:32:07] "GET /static/css/main.css HTTP/1.1" 304 -
+INFO:app:[2023-02-17 20:32:16,890] - Get all content
+INFO:werkzeug:[2023-02-17 20:32:16,893] - 172.17.0.1 - - [17/Feb/2023 20:32:16] "GET / HTTP/1.1" 200 -   
+INFO:werkzeug:[2023-02-17 20:32:16,997] - 172.17.0.1 - - [17/Feb/2023 20:32:16] "GET /static/css/main.css HTTP/1.1" 304 -
 
-   WARNING: This is a development server. Do not use it in a production deployment.
- * Running on http://172.17.0.2:3111/ (Press CTRL+C to quit)
-172.17.0.1 - - [12/Feb/2023 13:02:20] "GET / HTTP/1.1" 200 -
-172.17.0.1 - - [12/Feb/2023 13:02:20] "GET /static/css/main.css HTTP/1.1" 200 -
-172.17.0.1 - - [12/Feb/2023 13:02:22] "GET /favicon.ico HTTP/1.1" 404 -
+
+# tag the image
+docker tag techtrends mynamerahulkumar/techtrends:latest
+
+# push the image
+docker push mynamerahulkumar/techtrends:latest
